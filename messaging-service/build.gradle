@@ -1,0 +1,81 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.2.RELEASE'
+        springCloudVersion = 'Greenwich.RELEASE'
+        dependencyManagementVersion = '1.0.6.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+        classpath("io.spring.gradle:dependency-management-plugin:$dependencyManagementVersion")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: "io.spring.dependency-management"
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
+}
+
+bootRun{
+    jvmArgs = ["-Xmx200m", "-Xms128m"]
+}
+
+group 'com.romanidze.teamfinder'
+version '1.0'
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+compileJava.options.encoding = 'UTF-8'
+
+ext{
+    lombokVersion = '1.18.4'
+    mapstructVersion = '1.3.0.Beta2'
+
+    jacksonVersion = '2.9.8'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+
+    compile("org.springframework.cloud:spring-cloud-starter-consul-all")
+    compile("org.springframework.boot:spring-boot-starter-amqp")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compileOnly("org.springframework.boot:spring-boot-configuration-processor")
+
+    compile("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+    compile("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
+    compile("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+
+    compile("com.fasterxml.jackson.module:jackson-module-parameter-names:$jacksonVersion")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    
+    compile("org.mapstruct:mapstruct:$mapstructVersion")
+    compile("org.projectlombok:lombok:$lombokVersion")
+    annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
+    annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}

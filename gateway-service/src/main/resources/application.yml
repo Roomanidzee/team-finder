@@ -1,0 +1,45 @@
+spring:
+
+  cloud:
+
+    consul:
+
+      host: localhost
+      port: 8500
+
+      config:
+
+        enabled: true
+        prefix: config
+
+      discovery:
+
+        register: true
+
+    service-registry:
+
+      auto-registration:
+
+        enabled: true
+
+    gateway:
+
+      discovery:
+
+        locator:
+
+          enabled: true
+          lower-case-service-id: true
+
+      routes:
+        - id: team-service
+          uri: lb://team-service
+          predicates:
+          - Path=/team/**
+        - id: messaging-service
+          uri: lb://messaging-service
+          predicates:
+          - Path=/messaging/**
+
+server:
+  port: 8082

@@ -1,0 +1,48 @@
+messaging:
+  exchange: team-finder-exchange
+  accept-cap:
+    binding: accept-cap
+    queue: accept-cap-queue
+  decline-cap:
+    binding: decline-cap
+    queue: decline-cap-queue
+  check-cap-request:
+    binding: check-cap-req
+    queue: check-cap-request
+  check-cap-result:
+    binding: check-cap-res
+    queue: check-cap-result
+
+spring:
+
+  rabbitmq:
+
+    host: localhost
+    port: 5672
+    username: tf-user
+    password: tf-pass
+
+  cloud:
+
+    consul:
+
+      host: localhost
+      port: 8500
+
+      config:
+
+        enabled: true
+        prefix: config
+
+      discovery:
+
+        register: true
+
+    service-registry:
+
+      auto-registration:
+
+        enabled: true
+
+server:
+  port: 8081
